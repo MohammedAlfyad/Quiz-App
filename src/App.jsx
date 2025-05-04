@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import logo from "../public/logo.jpg";
@@ -12,8 +12,31 @@ function App() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [startQuiz, setStartQuiz] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(13 * 60); // 13 دقيقة بالثواني
+  const [answers, setAnswers] = useState([]);
+
+  useEffect(() => {
+    if (!startQuiz || showResult) return;
+    if (timeLeft <= 0) {
+      setShowResult(true); // انتهاء الوقت
+      return;
+    }
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => prevTime - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft, startQuiz, showResult]);
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = (seconds % 60).toString().padStart(2, "0");
+    return `${m}:${s}`;
+  };
 
   const handleAnswer = (isCorrect) => {
+    setAnswers((prev) => [...prev, isCorrect]);
     if (isCorrect) setScore(score + 1);
     const next = currentQuestion + 1;
     if (next < quizData.length) {
@@ -95,20 +118,20 @@ function App() {
     html2canvas(report, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
-  
+
       const pageWidth = pdf.internal.pageSize.getWidth();
       const pageHeight = pdf.internal.pageSize.getHeight();
-  
+
       const imgWidth = pageWidth;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  
+
       let heightLeft = imgHeight;
       let position = 0;
-  
+
       // الصفحة الأولى
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
-  
+
       // صفحات إضافية إن لزم
       while (heightLeft > 0) {
         position -= pageHeight;
@@ -116,11 +139,10 @@ function App() {
         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-  
+
       pdf.save(`${name}_Quiz_Report.pdf`);
     });
   };
-  
 
   if (!startQuiz) {
     return (
@@ -158,9 +180,10 @@ function App() {
   }
 
   if (showResult) {
-    const correctAnswers = score;
-    const wrongAnswers = quizData.length - score;
-    // const totalScore = score * 1;
+    const correctAnswers = answers.filter((ans) => ans === true).length;
+    const wrongAnswers = answers.filter((ans) => ans === false).length;
+    const answered = answers.length;
+    const unanswered = quizData.length - answered;
     const { level, scoreRange, ielts, toefl, sat } = getLevel(correctAnswers);
     return (
       <div className="result-screen">
@@ -249,7 +272,7 @@ function App() {
             <thead>
               <tr>
                 <th>You answered </th>
-                <th>70/70</th>
+                <th>{answered} / 70</th>
               </tr>
             </thead>
             <tbody>
@@ -260,6 +283,10 @@ function App() {
               <tr>
                 <th>Incorrect answers </th>
                 <th>{wrongAnswers} / 70</th>
+              </tr>
+              <tr>
+                <th>Unanswered questions </th>
+                <th>{unanswered} / 70</th>
               </tr>
             </tbody>
           </table>
@@ -291,7 +318,7 @@ function App() {
           <hr />
           <div className="footer-note">
             <p>
-              Pro London Institute - Al Ain - Al Bateen - Extra Market, U.A.E
+              Pro London Institute - Al Ain - Al Boteen - Extra Market, U.A.E
             </p>
             <p>Phone: +971 568 044 683</p>
           </div>
@@ -321,15 +348,36 @@ function App() {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          flexDirection:"column-reverse",
+          flexDirection: "column-reverse",
         }}
       >
         <p style={{ fontSize: "24px" }}>
           <strong> Choose the best answer: </strong>
         </p>
-        <p style={{ fontSize: "18px" }}>
-          <strong> {currentQuestion + 1} </strong> / {quizData.length}
-        </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "10px",
+          }}
+        >
+          <p style={{ fontSize: "18px" }}>
+            <strong> {currentQuestion + 1} </strong> / {quizData.length}
+          </p>
+          <div
+            style={{
+              fontSize: "18px",
+              fontWeight: "bold",
+              color: timeLeft <= 30 ? "red" : "#333",
+              backgroundColor: "#f0f0f0",
+              padding: "5px 12px",
+              borderRadius: "8px",
+            }}
+          >
+            ⏰ {formatTime(timeLeft)}
+          </div>
+        </div>
       </div>
       <h2 className="ques">{quizData[currentQuestion].question}</h2>
       <div className="options">
