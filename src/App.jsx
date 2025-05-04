@@ -321,7 +321,7 @@ function App() {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          padding: "0px 25px",
+          flexDirection:"column-reverse",
         }}
       >
         <p style={{ fontSize: "24px" }}>
