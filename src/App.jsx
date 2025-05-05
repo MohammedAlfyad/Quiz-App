@@ -54,7 +54,7 @@ function App() {
   };
 
   const getLevel = (correct) => {
-    if (correct >= 0 && correct <= 20) {
+    if (correct >= 0 && correct <= 30) {
       return {
         level: "A1",
         scoreRange: "0% – 28%",
@@ -62,7 +62,7 @@ function App() {
         toefl: "0 – 31",
         sat: "200 – 350",
       };
-    } else if (correct >= 21 && correct <= 30) {
+    } else if (correct >= 31 && correct <= 50) {
       return {
         level: "A2",
         scoreRange: "30% – 43%",
@@ -70,7 +70,7 @@ function App() {
         toefl: "32 – 45",
         sat: "350 – 450",
       };
-    } else if (correct >= 31 && correct <= 39) {
+    } else if (correct >= 51 && correct <= 58) {
       return {
         level: "B1",
         scoreRange: "44% – 55%",
@@ -78,7 +78,7 @@ function App() {
         toefl: "46 – 59",
         sat: "450 – 500",
       };
-    } else if (correct >= 40 && correct <= 49) {
+    } else if (correct >= 59 && correct <= 63) {
       return {
         level: "B2",
         scoreRange: "57% – 70%",
@@ -86,7 +86,7 @@ function App() {
         toefl: "60 – 78",
         sat: "500 – 600",
       };
-    } else if (correct >= 50 && correct <= 61) {
+    } else if (correct >= 64 && correct <= 67) {
       return {
         level: "C1",
         scoreRange: "71% – 87%",
@@ -94,7 +94,7 @@ function App() {
         toefl: "79 – 95",
         sat: "600 – 650",
       };
-    } else if (correct >= 62 && correct <= 70) {
+    } else if (correct >= 68 && correct <= 70) {
       return {
         level: "C2",
         scoreRange: "88% – 100%",
@@ -320,10 +320,12 @@ function App() {
             <p>
               Pro London Institute - Al Ain - Al Boteen - Extra Market, U.A.E
             </p>
-            <p>Phone: +971 568 044 683</p>
+            <p>Phone: +971 568 044 683 || Email: trainerprolondon@gmail.com</p>
           </div>
         </div>
-
+        <p className="message">
+          ✅ Well done! You have successfully completed the test.
+        </p>
         <button onClick={generatePDF} className="button">
           Download the report PDF
         </button>
