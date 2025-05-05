@@ -22,7 +22,12 @@ body {
   text-align: center;
   position: relative;
 }
-
+.result-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 /* ترويسة المعهد (اسم + شعار) */
 .header {
   display: flex;
@@ -85,8 +90,16 @@ body {
   padding: 40px;
   border: 1px solid #ccc;
   background: #fff;
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
 }
-
+.message {
+  font-size: 20px;
+  color: green;
+  font-weight: bold;
+  margin-top: 20px;
+}
 .tex {
   text-align: left;
 }
@@ -99,6 +112,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin-top: -20px;
 }
 
 .report-header img {
@@ -123,5 +137,5 @@ body {
 .footer-note {
   font-size: 12px;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
