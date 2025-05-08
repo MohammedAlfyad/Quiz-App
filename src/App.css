@@ -112,7 +112,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: -20px;
+  margin-top: -30px;
 }
 
 .report-header img {
@@ -122,7 +122,7 @@ body {
 .report-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
+  margin-top: 6px;
 }
 
 .report-table th,
