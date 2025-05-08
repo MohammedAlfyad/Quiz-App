@@ -11,6 +11,7 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [startQuiz, setStartQuiz] = useState(false);
   const [timeLeft, setTimeLeft] = useState(13 * 60); // 13 دقيقة بالثواني
   const [answers, setAnswers] = useState([]);
@@ -164,13 +165,22 @@ function App() {
         <br />
         <input
           value={email}
+          type="email"
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Your Email"
           className="input-field"
         />
         <br />
+        <input
+          value={phone}
+          type="tel"
+          onChange={(e) => setPhone(e.target.value)}
+          placeholder="Your Phone Number"
+          className="input-field"
+        />
+        <br />
         <button
-          onClick={() => name && email && setStartQuiz(true)}
+          onClick={() => name && email && phone && setStartQuiz(true)}
           className="button"
         >
           Start
@@ -219,6 +229,9 @@ function App() {
           </p>
           <p className="tex">
             <strong>Email:</strong> {email}
+          </p>
+          <p className="tex">
+            <strong>Phone Number:</strong> {phone}
           </p>
           <p className="tex">
             has successfully completed the English Placement Test conducted by
