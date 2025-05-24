@@ -15,6 +15,10 @@ function App() {
   const [startQuiz, setStartQuiz] = useState(false);
   const [timeLeft, setTimeLeft] = useState(13 * 60); // 13 دقيقة بالثواني
   const [answers, setAnswers] = useState([]);
+  const [teacherAuthenticated, setTeacherAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const correctPassword = "pro1234";
 
   useEffect(() => {
     if (!startQuiz || showResult) return;
@@ -144,6 +148,44 @@ function App() {
       pdf.save(`${name}_Quiz_Report.pdf`);
     });
   };
+  if (!teacherAuthenticated) {
+    return (
+      <div className="start-screen">
+        <div className="header">
+          <img src={logo} alt="logo" />
+          <div className="title">
+            <h2>معهد برو لندن للتدريب و اللغات</h2>
+            <p>Pro London Institute for Training and Languages</p>
+          </div>
+        </div>
+        <h2>Enter the Teacher Password</h2>
+        <input
+          type="password"
+          value={passwordInput}
+          onChange={(e) => setPasswordInput(e.target.value)}
+          placeholder="Enter Teacher Password"
+          className="input-field"
+        />
+        <br />
+        <button
+          className="button"
+          onClick={() => {
+            if (passwordInput === correctPassword) {
+              setTeacherAuthenticated(true);
+              setPasswordError("");
+            } else {
+              setPasswordError("❌ كلمة السر غير صحيحة");
+            }
+          }}
+        >
+          Submit
+        </button>
+        {passwordError && (
+          <p style={{ color: "red", marginTop: "10px" }}>{passwordError}</p>
+        )}
+      </div>
+    );
+  }
 
   if (!startQuiz) {
     return (
@@ -366,7 +408,13 @@ function App() {
           flexDirection: "column-reverse",
         }}
       >
-        <p style={{ fontSize: "24px" }}>
+        <p
+          style={{
+            fontSize: "24px",
+            margin: "0.3rem",
+            alignSelf: "self-start",
+          }}
+        >
           <strong> Choose the best answer: </strong>
         </p>
         <div
